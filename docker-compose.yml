@@ -1,0 +1,39 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    networks:
+      - bai2-network
+    depends_on:
+      - mongodb
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - bai2-network
+
+  mongodb:
+    image: mongo
+    volumes:
+      - bai2-mongo-data:/data/db
+    networks:
+      - bai2-network
+
+  nginx:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - bai2-network
+
+networks:
+  bai2-network:
+    driver: bridge
+
+volumes:
+  bai2-mongo-data:
